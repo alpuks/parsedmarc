@@ -111,7 +111,7 @@ def _main():
                             report, kafka_aggregate_topic)
                 except Exception as error_:
                     logger.error("Kafka Error: {0}".format(
-                         error_.__str__()))
+                        error_.__str__()))
                 try:
                     if opts.s3_bucket:
                         s3_client.save_aggregate_report_to_s3(report)
@@ -233,6 +233,7 @@ def _main():
                      save_aggregate=False,
                      save_forensic=False,
                      imap_host=None,
+                     imap_method=None,
                      imap_skip_certificate_verification=False,
                      imap_ssl=True,
                      imap_port=993,
@@ -342,6 +343,8 @@ def _main():
                 logger.error("host setting missing from the "
                              "imap config section")
                 exit(-1)
+            if "method" in imap_config:
+                opts.imap_method = imap_config["method"]
             if "port" in imap_config:
                 opts.imap_port = imap_config.getint("port")
             if "timeout" in imap_config:
@@ -672,6 +675,7 @@ def _main():
                 ssl = False
             reports = get_dmarc_reports_from_inbox(
                 host=opts.imap_host,
+                method=opts.imap_method,
                 port=opts.imap_port,
                 ssl=ssl,
                 verify=verify,

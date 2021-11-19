@@ -1006,6 +1006,7 @@ def get_imap_capabilities(server):
 
 
 def get_dmarc_reports_from_inbox(connection=None,
+                                 method=None,
                                  host=None,
                                  user=None,
                                  password=None,
@@ -1074,7 +1075,7 @@ def get_dmarc_reports_from_inbox(connection=None,
     if connection:
         server = connection
     else:
-        server = IMAPClient(host, user, password, port=port,
+        server = IMAPClient(host, method,  user, password, port=port,
                             ssl=ssl, verify=verify,
                             timeout=timeout,
                             max_retries=max_retries,
@@ -1134,7 +1135,7 @@ def get_dmarc_reports_from_inbox(connection=None,
     if not test:
         if delete:
             processed_messages = aggregate_report_msg_uids + \
-                                 forensic_report_msg_uids
+                forensic_report_msg_uids
 
             number_of_processed_msgs = len(processed_messages)
             for i in range(number_of_processed_msgs):
